@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import queryString from 'querystring';
+import queryString from 'query-string';
 import { useForm } from '../../hooks/useForm';
 import { getHeroesByName } from '../../selectors/getHeroesByName';
 import { HeroCard } from '../hero/HeroCard';
@@ -8,16 +8,18 @@ export const SearchScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { query = '' } = queryString.parse(location.search);
+
   const [formValues, handleInputChange] = useForm({
-    searchText: ''
+    searchText: query
   });
 
   const { searchText } = formValues;
-  const heroesFiltered = getHeroesByName(searchText);
+  const heroesFiltered = getHeroesByName(query);
 
   const handleSearch = (event) => {
     event.preventDefault();
-    navigate(`?q=${searchText}`);
+    navigate(`?query=${searchText}`);
   }
 
   return (
